@@ -19,17 +19,25 @@ class VisualizerWindow : public QMainWindow {
 
   void initialize(const std::shared_ptr<SurfelMapping>& fusion, const rv::ParameterList& params);
 
+  void setPoseDestination(const std::string& dst) {
+    poseDst_ = dst;
+  }
+
+  void setQuitAtFinish(bool quit) {
+    quitAtFinish_ = quit;
+  }
+
  public slots:
   /** \brief open the given file and initialize the laser scan reader. **/
   void openFile(const QString& filename);
   void startRecording();
 
+  /** \brief start sequential reading of laser scans and update model. **/
+  void play(bool toggle);
+
  protected slots:
   /**  \brief open a laser scan file and initialize laser scan reader. **/
   void showOpenFileDialog();
-
-  /** \brief start sequential reading of laser scans and update model. **/
-  void play(bool toggle);
 
   /** \brief read next scan **/
   void nextScan();
@@ -50,7 +58,7 @@ class VisualizerWindow : public QMainWindow {
   void optimizeGraph();
   void initializeGraph();
 
-  void savePoses();
+  void savePoses(const std::string& dst_filename = "");
 
  protected:
   void updatePlaybackControls();
@@ -67,6 +75,9 @@ class VisualizerWindow : public QMainWindow {
   rv::Laserscan currentLaserscan_;
   QString lastDirectory_;
   QTimer timer_;
+
+  bool quitAtFinish_;
+  std::string poseDst_;
 
   std::shared_ptr<SurfelMapping> fusion_;
 

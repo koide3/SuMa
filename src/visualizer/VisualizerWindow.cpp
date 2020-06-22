@@ -33,6 +33,7 @@ using namespace glow;
 VisualizerWindow::VisualizerWindow() {
   ui_.setupUi(this);
   lastDirectory_ = QDir::homePath();
+  quitAtFinish_ = false;
 
   // alternative icons (rcc) for windows/mac?
   ui_.actionOpenLaserscan->setIcon(QIcon::fromTheme("document-open"));
@@ -571,13 +572,23 @@ void VisualizerWindow::play(bool start) {
 }
 
 void VisualizerWindow::nextScan() {
-  if (reader_ == nullptr) return;
+  if (reader_ == nullptr) {
+    return;
+  }
 
   if (currentScanIdx_ < reader_->count() - 1) {
     ui_.sldTimeline->setValue(currentScanIdx_ + 1);
   } else {
     if (ui_.btnPlay->isChecked()) {
       play(false);
+
+      if(!poseDst_.empty()) {
+        savePoses(poseDst_);
+      }
+
+      if(quitAtFinish_) {
+        this->close();
+      }
     }
   }
 
@@ -837,9 +848,15 @@ void VisualizerWindow::initializeGraph() {
   ui_.wCanvas->updateGL();
 }
 
-void VisualizerWindow::savePoses() {
-  QString defaultFilename = QDir(lastDirectory_).filePath("poses.txt");
-  QString retValue = QFileDialog::getSaveFileName(this, "Save poses", defaultFilename, "Pose file(*.txt)");
+void VisualizerWindow::savePoses(const std::string& dst_filename) {
+  QString retValue;
+
+  if(dst_filename.empty()) {
+    QString defaultFilename = QDir(lastDirectory_).filePath("poses.txt");
+    retValue = QFileDialog::getSaveFileName(this, "Save poses", defaultFilename, "Pose file(*.txt)");
+  } else {
+    retValue = QString(dst_filename.c_str());
+  }
 
   if (!retValue.isNull() && fusion_ != nullptr) {
     //    Eigen::Matrix4f Tr = calib_["Tr"];

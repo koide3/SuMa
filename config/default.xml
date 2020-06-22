@@ -71,7 +71,7 @@
   <param name="history stride" type="integer">5</param>
   
   <!-- loop closure parameters. -->
-  <param name="close-loops" type="boolean">true</param>
+  <param name="close-loops" type="boolean">false</param>
   <param name="loop-residual-threshold" type="float">1.15</param>
   <param name="loop-valid-threshold" type="float">0.95</param>
   <param name="loop-outlier-threshold" type="float">1.1</param>

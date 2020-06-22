@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.2.0)
 project(surfel_mapping)
 
 find_package(OpenGL REQUIRED)
-find_package(Qt5Gui REQUIRED) 
+find_package(Qt5Gui REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem system thread serialization regex timer)
+find_package(Boost REQUIRED COMPONENTS filesystem system thread serialization regex timer program_options)
 
 find_package(GTSAM REQUIRED)
 
@@ -30,7 +30,7 @@ set(CMAKE_CXX_FLAGS "-UDEBUG_GL -UDEBUG -DNDEBUG -g2 ${CMAKE_CXX_FLAGS}")
 
 
 # since now everything resides in "bin", we have to copy some stuff.
-  
+
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 include_directories(${QT5_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${GTSAM_INCLUDE_DIRS} /usr/include/eigen3)
@@ -53,16 +53,16 @@ set(VIZ_SHADER_SRC ${CMAKE_BINARY_DIR}/visualization_shaders.cpp)
 
 COMPILE_SHADERS(${COMP_SHADER_SRC}
   src/shader/color.glsl
-  
+
   src/shader/empty.vert
   src/shader/empty.frag
   src/shader/quad.geom
   src/shader/passthrough.frag
-  
+
   src/shader/Frame2Model_jacobians.frag
   src/shader/Frame2Model_jacobians.geom
   src/shader/Frame2Model_jacobians.vert
-  
+
   src/shader/render_surfels.frag
   src/shader/render_surfels.geom
   src/shader/render_surfels.vert
@@ -89,7 +89,7 @@ COMPILE_SHADERS(${COMP_SHADER_SRC}
   src/shader/gen_indexmap.vert
   src/shader/gen_indexmap.frag
   src/shader/bilateral_filter.frag
-  
+
   # needed for surfelmap:
   src/shader/draw_surfels.frag
   src/shader/draw_surfels.geom
@@ -101,7 +101,7 @@ COMPILE_SHADERS(${COMP_SHADER_SRC}
   src/shader/coloredvertices.vert
 )
 
-COMPILE_SHADERS(${VIZ_SHADER_SRC} 
+COMPILE_SHADERS(${VIZ_SHADER_SRC}
   src/shader/draw_normalmap3d.geom
   src/shader/draw_normalmap3d.vert
   src/shader/draw_vertexmap3d.vert
@@ -112,7 +112,7 @@ COMPILE_SHADERS(${VIZ_SHADER_SRC}
   src/shader/draw_mesh.vert
   src/shader/draw_mesh.frag
 
-  
+
   src/shader/draw_posegraph_edge.geom
 
   src/shader/laserscan.vert
@@ -148,15 +148,15 @@ add_library(suma
   src/core/LieGaussNewton.cpp
   src/core/Posegraph.cpp
   src/core/ImagePyramidGenerator.cpp
-  
+
    ${COMP_SHADER_SRC})
-   
+
 add_executable(visualizer
 
   src/io/KITTIReader.cpp
   src/io/SimulationReader.cpp
   src/io/RobocarReader.cpp
-  
+
   src/opengl/Mesh.cpp
   src/opengl/Model.cpp
   src/opengl/ObjReader.cpp
@@ -166,7 +166,7 @@ add_executable(visualizer
 
   ${UI_HDRS}
   ${VIZ_SHADER_SRC}
-   
+
   src/visualizer/GraphWidget.cpp
   src/visualizer/ViewportWidget.cpp
   src/visualizer/VisualizerWindow.cpp
@@ -174,7 +174,7 @@ add_executable(visualizer
 
 add_executable(genvideo
   ${VIZ_SHADER_SRC}
-  
+
   src/opengl/Mesh.cpp
   src/opengl/Model.cpp
   src/opengl/ObjReader.cpp
@@ -185,12 +185,12 @@ add_executable(genvideo
   src/genvideo.cpp)
 
 if(NOT GTEST_FOUND)
- 
+
   IF(IS_DIRECTORY "/usr/src/gtest/")
-    MESSAGE(STATUS "Found google test sources in /usr/src/gtest/") 
-    
+    MESSAGE(STATUS "Found google test sources in /usr/src/gtest/")
+
     ADD_SUBDIRECTORY(/usr/src/gtest/ gtest)
-    
+
     # mimick the behaviour of find_package(GTest)
     SET(GTEST_FOUND TRUE)
     SET(GTEST_BOTH_LIBRARIES gtest gtest_main)
