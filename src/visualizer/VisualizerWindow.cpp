@@ -577,7 +577,9 @@ void VisualizerWindow::nextScan() {
   }
 
   if (currentScanIdx_ < reader_->count() - 1) {
-    std::cout << currentScanIdx_ << "/" << reader_->count() << "    \r" << std::flush;
+    if(currentScanIdx_ % 16 == 0) {
+      std::cout << currentScanIdx_ << "/" << reader_->count() << "    \r" << std::flush;
+    }
     ui_.sldTimeline->setValue(currentScanIdx_ + 1);
   } else {
     if (ui_.btnPlay->isChecked()) {
