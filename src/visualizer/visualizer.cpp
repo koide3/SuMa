@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
   ("dataset", value<std::string>(), "KITTI dataset")
   ("play,p", "if auto play the dataset")
   ("save,s", value<std::string>(), "destination filename of estimated pose data")
+  ("background,b", "do not show window")
   ("quit,q", "quit when playback finished")
   ;
 
@@ -58,7 +59,9 @@ int main(int argc, char** argv) {
 
   window.initialize(fusion, params);
 
-  window.show();
+  if(!vm.count("background")) {
+    window.show();
+  }
 
   // open file:
   if (vm.count("dataset")) {
