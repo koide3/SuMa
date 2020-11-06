@@ -10,7 +10,7 @@ cd suma/docker
 
 ## Run
 
-On docker image:
+### On docker image:
 ```bash
 cd suma/docker
 ./run.sh -v ~/kitti:/kitti
