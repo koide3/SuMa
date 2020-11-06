@@ -19,3 +19,5 @@ cd suma/docker
 ```
 
 KITTI: http://www.cvlibs.net/datasets/kitti/
+
+![suma](https://user-images.githubusercontent.com/31344317/98347890-60053980-205b-11eb-97fa-de73c2f9448f.gif)
