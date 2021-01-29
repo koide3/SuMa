@@ -11,6 +11,9 @@
 #include "io/SimulationReader.h"
 #include "util/ScanAccumulator.h"
 
+#include "adaptive_tuning/adaptive_tuning.hpp"
+
+
 class VisualizerWindow : public QMainWindow {
   Q_OBJECT
  public:
@@ -43,6 +46,7 @@ class VisualizerWindow : public QMainWindow {
   void nextScan();
   /** \brief read specific scan. **/
   void setScan(int idx);
+  void setScanHook(int idx);
 
   /** \brief reset reader's state and model. **/
   void reset();

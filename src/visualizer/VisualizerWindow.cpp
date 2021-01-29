@@ -661,6 +661,18 @@ void VisualizerWindow::updatePlaybackControls() {
   }
 }
 
+void VisualizerWindow::setScanHook(int idx) {
+  if(idx % 10) {
+    return;
+  }
+
+  auto params = find_best_params(currentLaserscan_);
+
+  // double v = ui_.spinMapMaxDistance->value();
+  // ui_.spinMapMaxDistance->setValue(v + 0.1);
+  updateParameters();
+}
+
 void VisualizerWindow::setScan(int idx) {
   if (reader_ == nullptr) return;
   if (static_cast<uint32_t>(idx) >= reader_->count()) return;  // ignore invalid calls.
@@ -671,6 +683,7 @@ void VisualizerWindow::setScan(int idx) {
 
   if (reader_->isSeekable()) reader_->seek(idx);
   reader_->read(currentLaserscan_);
+  setScanHook(idx);
 
   if (lastScanIdx > currentScanIdx_) {
     acc_->clear();
@@ -796,6 +809,8 @@ void VisualizerWindow::updateParameters() {
 
   params_.insert(BooleanParameter("filter_vertexmap", ui_.chkBilateralFiltering->isChecked()));
   params_.insert(BooleanParameter("use_filtered_vertexmap", ui_.chkFilterVertices->isChecked()));
+
+  std::cout << "update max-dist:" << ui_.spinMapMaxDistance->value() << std::endl;
 
   params_.insert(FloatParameter("bilateral_sigma_range", ui_.spinBilateralSigmaRange->value()));
   params_.insert(FloatParameter("bilateral_sigma_space", ui_.spinBilateralSigmaSpace->value()));

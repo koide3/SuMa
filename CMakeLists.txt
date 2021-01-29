@@ -167,10 +167,13 @@ add_executable(visualizer
   ${UI_HDRS}
   ${VIZ_SHADER_SRC}
 
+  src/adaptive_tuning/adaptive_tuning.cpp
+
   src/visualizer/GraphWidget.cpp
   src/visualizer/ViewportWidget.cpp
   src/visualizer/VisualizerWindow.cpp
-	src/visualizer/visualizer.cpp)
+  src/visualizer/visualizer.cpp
+  )
 
 add_executable(genvideo
   ${VIZ_SHADER_SRC}
